@@ -1,0 +1,16 @@
+---
+title: "JuliaCall - Learning"
+output: html_notebook
+---
+
+
+```{r}
+#install.packages("JuliaCall")
+
+
+
+
+
+```
+
+ 
