@@ -6,7 +6,7 @@ output: html_notebook
 
 ```{r}
 #install.packages("JuliaCall")
-devtools::install_github("Non-Contradiction/JuliaCall")
+#devtools::install_github("Non-Contradiction/JuliaCall")
 
 library(JuliaCall)
 
@@ -18,5 +18,43 @@ julia <- julia_setup(JULIA_HOME = "D:/JuliaPro-0.6.0.1/Julia-0.6.0/bin")
 
 
 ```
+
+Register the engine.
+
+knitr::knit_engines$set(data = function(options) {
+  assign(options$output.var, read.table(text = options$code), envir = knitr::knit_global()
+  )
+  NULL
+})
+
+```{r}
+knitr::opts_chunk$set(echo = TRUE)
+knitr::knit_engines$set(julia = JuliaCall::eng_juliacall)
+
+
+```
+
+```{r}
+
+
+julia_library("Gadfly")
+julia_command("Gadfly.plot(y = [1 2 3])")
+
+julia_library("Plots")
+#@doc sqrt
+
+julia_command("gr()")
+
+
+julia_command("Plots.plot(Plots.fakedata(50,5),w=3)")
+
+
+
+```
+
+```{julia}
+@doc sqrt
+```
+
 
  
