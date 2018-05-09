@@ -1,0 +1,61 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+
+
+
+```{r}
+
+install_tensorflow()
+install.packages(c("coda","mvtnorm","devtools","loo"))
+library(devtools)
+devtools::install_github("rmcelreath/rethinking")
+library(rethinking)
+library(greta)
+library(DiagrammeR)
+library(bayesplot)
+library(ggplot2)
+
+```
+
+```{r}
+# Example from section 8.3 Statistical Rethinking
+data(rugged)
+d <- rugged
+d$log_gdp <- log(d$rgdppc_2000)
+dd <- d[complete.cases(d$rgdppc_2000), ]
+dd_trim <- dd[ , c("log_gdp","rugged","cont_africa")]
+
+
+data(rugged)
+dd_trim <- rugged %>% 
+  mutate(log_gdp = log(d$rgdppc_2000)) %>% 
+  filter(complete.cases(rgdppc_2000)) %>% 
+  select(log_gdp, rugged, cont_africa) 
+
+
+
+head(dd_trim)
+##     log_gdp rugged cont_africa
+## 3  7.492609  0.858           1
+## 5  8.216929  3.427           0
+## 8  9.933263  0.769           0
+## 9  9.407032  0.775           0
+## 10 7.792343  2.688           0
+## 12 9.212541  0.006           0
+set.seed(1234)
+
+
+```
+
+```{r}
+
+g_log_gdp <- as_data(dd_trim$log_gdp)
+g_rugged <- as_data(dd_trim$rugged)
+g_cont_africa <- as_data(dd_trim$cont_africa)
+
+
+```
+
+
