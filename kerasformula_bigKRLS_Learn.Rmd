@@ -5,29 +5,78 @@ output: html_notebook
 
  
 **kerasformula** sample code
+Compare the default dense model that ksm generates to the lstm model. 
+
 ```{r}
+#devtools::install_github("rstudio/reticulate", force = TRUE)
+library(reticulate)
 #devtools::install_github("rstudio/keras")
-#install.packages("kerasformula")
-library(kerasformula)
+library(keras)
 #install_keras()
-
+#install.packages("kerasformula")
+#devtools::install_github("rdrr1990/kerasformula")
+library(kerasformula)
 ```
 
+Load imdb data in library(keras)
+Note: To control runtime, the number of features are limited and only a sliver of the training data is used.
 
 ```{r}
+max_features <- 5000 # 5,000 words (ranked by popularity) found in movie reviews
+maxlen <- 50  # Cut texts after 50 words (among top max_features most common words) 
+
+cat('Loading data...\n')
+
+imdb <- dataset_imdb(num_words = max_features)
+imdb_df <- as.data.frame(cbind(imdb$train$y, pad_sequences(imdb$train$x)))
+demo_sample <- sample(nrow(imdb_df), 1000)
 
 ```
 
+kms's default dense model
+```{r}
+out_dense = kms("V1 ~ .", data = imdb_df[demo_sample, ], Nepochs = 2)
+out_dense$confusion
+```
 
+Alternative versions of kms's default dense model
 ```{r}
 
+out_dense <- kms("V1 ~ .", data = imdb_df[demo_sample, ], Nepochs = 10, seed=123, scale=NULL,
+                 layers = list(units = c(512, 256, 128, NA), 
+                               activation = c("softmax", "relu", "relu", "softmax"),
+                               dropout = c(0.75, 0.4, 0.3, NA),
+                               use_bias = TRUE,
+                               kernel_initializer = NULL,
+                               kernel_regularizer = "regularizer_l1",
+                               bias_regularizer = "regularizer_l1",
+                               activity_regularizer = "regularizer_l1"
+                               ))
+out_dense$confusion
+
 ```
 
 
+
+lstm's dense model
 ```{r}
+k <- keras_model_sequential()
+k %>%
+  layer_embedding(input_dim = max_features, output_dim = 128) %>% 
+  layer_lstm(units = 64, dropout = 0.2, recurrent_dropout = 0.2) %>% 
+  layer_dense(units = 1, activation = 'sigmoid')
+
+k %>% compile(
+  loss = 'binary_crossentropy',
+  optimizer = 'adam',
+  metrics = c('accuracy')
+)
+
+out_lstm = kms(input_formula = "V1 ~ .", data = imdb_df[demo_sample, ], keras_model_seq = k, Nepochs = 2)
+out_lstm$confusion
+
 
 ```
-
 
 
 
