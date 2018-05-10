@@ -1,0 +1,22 @@
+---
+title: "Learn kerasformula and Keras"
+output: html_notebook
+---
+
+ 
+
+```{r}
+
+#install.packages(c("Rcpp", "RcppArmadillo", "bigmemory", "biganalytics", "snow", "shiny", "httpuv", "scales", "lazyeval", "tibble"))
+#devtools::install_github('rdrr1990/bigKRLS')
+library(bigKRLS)
+vignette("bigKRLS_basics")
+
+#devtools::install_github("rstudio/keras")
+#install.packages("kerasformula")
+library(kerasformula)
+#install_keras()
+
+
+```
+
