@@ -8,12 +8,30 @@ output: html_notebook
 Compare the default dense model that ksm generates to the lstm model. 
 
 ```{r}
-#devtools::install_github("rstudio/reticulate", force = TRUE)
+
+#devtools::install_github("rstudio/tensorflow", force = TRUE)
+library(tensorflow)   # install all of the Python dependencies using a built-in function
+install_tensorflow()
+
+#use_virtualenv("~/myenv")
+#use_condaenv("myenv")
+
+
+##
+devtools::install_github("rstudio/reticulate", force = TRUE)
 library(reticulate)
-#devtools::install_github("rstudio/keras")
+reticulate::use_python("D:/Anaconda3/pkgs/python-2.7.15-he216670_0")
+reticulate::py_config()
+#Sys.getenv("RETICULATE_PYTHON")
+Sys.setenv(RETICULATE_PYTHON = "D:/Anaconda3/pkgs/python-2.7.15-he216670_0")
+Sys.setenv(PYTHONHOME = "D:/Anaconda3/pkgs/python-2.7.15-he216670_0")
+##
+
+
+devtools::install_github("rstudio/keras", force = TRUE)
 library(keras)
-#install_keras()
-#install.packages("kerasformula")
+install_keras(conda = "D:/Anaconda3/Scripts/conda.exe")
+#install.packages("kerasformula", force = TRUE)
 #devtools::install_github("rdrr1990/kerasformula")
 library(kerasformula)
 ```

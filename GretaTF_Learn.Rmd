@@ -6,8 +6,8 @@ output: html_notebook
 
 ```{r}
 
-#install_tensorflow()
-#install.packages(c("coda","mvtnorm","devtools","loo"))
+install_tensorflow()
+install.packages(c("coda","mvtnorm","devtools","loo"))
 #library(devtools)
 #devtools::install_github("rmcelreath/rethinking")
 library(rethinking)
